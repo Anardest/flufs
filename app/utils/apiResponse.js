@@ -11,7 +11,7 @@ class ApiResponse {
             success: true,
             message,
             data,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toLocaleString()
         });
     };
 
@@ -27,7 +27,7 @@ class ApiResponse {
             success: false,
             message,
             details,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toLocaleString()
         });
     };
 };
