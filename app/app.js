@@ -27,6 +27,9 @@ app.use('', staticPagesRouter);
 const groupsRouter = require('./routes/groups');
 app.use('/api/groups', groupsRouter);
 
+const studentsRouter = require('./routes/students');
+app.use('/api/students', studentsRouter);
+
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порте ${PORT}`);
