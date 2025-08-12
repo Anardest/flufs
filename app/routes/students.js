@@ -3,13 +3,12 @@ const router = Router();
 const ApiResponse = require('../utils/apiResponse');
 const Validator = require('../utils/validator');
 const knex = require('../database');
-const studentFunctions = require('../utils/studentsFunc');
-const groupsFunctions = require('../utils/groupsFunc');
+const dbFunc = require('../utils/dataBaseChecker');
 
 router.put('/:id/edit', async (req, res) => {
     try {
         const studentId = req.params.id;
-        const existingStudent = await studentFunctions.checkStudent(studentId);
+        const existingStudent = await dbFunc.checkExistence('students', 'student_id', studentId, 'студент')
 
         const { first_name, last_name, group_id } = req.body;
         
@@ -21,7 +20,7 @@ router.put('/:id/edit', async (req, res) => {
             updates.last_name = last_name;
         }
         if (group_id) {
-            const existingGroup = await groupsFunctions.checkGroup(group_id);
+            const existingGroup = await dbFunc.checkExistence('groups', 'group_id', groupId, 'группа')
             updates.group_id = group_id;
         }
         
@@ -33,10 +32,6 @@ router.put('/:id/edit', async (req, res) => {
         const updatedCount = await knex('students')
             .where({ student_id: studentId })
             .update(updates);
-        
-        if (updatedCount.length === 0) {
-            return ApiResponse.error(res, 'Студент с указанным ID не найден');
-        }
 
         // Получаем обновленную запись для возврата в ответе
         const [updatedStudent] = await knex('students').where({ student_id: studentId }).select('*');
@@ -47,18 +42,14 @@ router.put('/:id/edit', async (req, res) => {
     }
 });
 
-router.delete('/:id/delete', async (req, res) => {
+router.delete('/:id/force_delete', async (req, res) => {
     try {
         const studentId = req.params.id;
-        await studentFunctions.checkStudent(studentId);
+        const existingStudent = await dbFunc.checkExistence('students', 'student_id', studentId, 'студент')
 
         const deletedCount = await knex('students')
             .where({ student_id: studentId })
             .del();
-        
-        if (deletedCount === 0) {
-            return ApiResponse.error(res, 'Студент не найден', null, 400);
-        }
 
         return ApiResponse.success(res, null, 'Студент удалён');
     } catch (error) {
