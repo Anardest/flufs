@@ -30,7 +30,35 @@ app.use('/api/groups', groupsRouter);
 const studentsRouter = require('./routes/students');
 app.use('/api/students', studentsRouter);
 
+const subjectsRouter = require('./routes/subjects');
+app.use('/api/subjects', subjectsRouter);
+
+const schedulesRouter = require('./routes/schedules');
+app.use('/api/shedules', schedulesRouter);
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порте ${PORT}`);
 });
+/**
+ * 3 группа
+ * {
+            "student_id": 5,
+            "first_name": "Дмитрий",
+            "last_name": "Васильевич"
+        },
+        {
+            "student_id": 6,
+            "first_name": "Дмитрий",
+            "last_name": "Сергеевич"
+        },
+        {
+            "student_id": 7,
+            "first_name": "Дмитрий",
+            "last_name": "Набоков"
+        }
+
+        {
+            "subject_id": 1,
+            "subject_name": "Математика"
+        },
+ */
